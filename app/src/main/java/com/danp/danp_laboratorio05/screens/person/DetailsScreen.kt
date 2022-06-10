@@ -1,4 +1,4 @@
-package com.danp.danp_laboratorio05.screens
+package com.danp.danp_laboratorio05.screens.person
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -18,34 +18,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.danp.danp_laboratorio05.CarViewModel
-import com.danp.danp_laboratorio05.data.Car
+import com.danp.danp_laboratorio05.PersonViewModel
+import com.danp.danp_laboratorio05.data.Person
 
 @Composable
 fun DetailsScreen(
-    carId: String?,
+    personId: String?,
     navController: NavController,
-    carViewModel: CarViewModel,
+    personViewModel: PersonViewModel,
     onSetAppTitle: (String) -> Unit,
     onShowFab: (Boolean, Boolean) -> Unit,
-    onCarDeleted: (Car) -> Unit
+    onPersonDeleted: (Person) -> Unit
 ) {
 
     LaunchedEffect(Unit) {
-        onSetAppTitle("Detalles del vehiculo")
+        onSetAppTitle("Detalles de la persona")
         onShowFab(false, false)
     }
 
-    val receivedCar = carViewModel.getItem(carId!!.toInt()).observeAsState()
-    val car = receivedCar.value ?: Car(0, "", "","", "")
+    val receivedPerson = personViewModel.getItem(personId!!.toInt()).observeAsState()
+    val person = receivedPerson.value ?: Person(0, "", "","", "")
 
     val showDialog = remember { mutableStateOf(false) }
     val deleteConfirmed = remember { mutableStateOf(false) }
 
     if (showDialog.value) {
         ShowConfirmationDialog(
-            title = "Eliminar vehiculo?",
-            text = "¿Esta seguro que desea eliminar este vehiculo?",
+            title = "¿Eliminar persona?",
+            text = "¿Esta seguro que desea eliminar esta persona?",
             onResponse = {
                 deleteConfirmed.value = it
                 showDialog.value = false
@@ -54,9 +54,9 @@ fun DetailsScreen(
     }
 
     if (deleteConfirmed.value) {
-        onCarDeleted(car)
-        navController.navigate("home") {
-            popUpTo("home") { inclusive = true }
+        onPersonDeleted(person)
+        navController.navigate("personHome") {
+            popUpTo("personHome") { inclusive = true }
         }
         deleteConfirmed.value = false
     }
@@ -83,7 +83,7 @@ fun DetailsScreen(
                 border = BorderStroke(1.dp, Color.Black),
             ) {
                 Text(
-                    text =  car.carPlate,
+                    text =  person.identification,
                     fontSize = MaterialTheme.typography.h3.fontSize,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
@@ -104,7 +104,7 @@ fun DetailsScreen(
                 )
         ) {
             Text(
-                text = "Marca",
+                text = "Nombre",
                 fontSize = MaterialTheme.typography.body1.fontSize,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -112,7 +112,7 @@ fun DetailsScreen(
                 color = Color(0xFF1873B9)
             )
             Text(
-                text = car.carBrand,
+                text = person.name,
                 fontSize = MaterialTheme.typography.body1.fontSize,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF60708F)
@@ -131,7 +131,7 @@ fun DetailsScreen(
                 ),
         ) {
             Text(
-                text = "Color",
+                text = "Apellido",
                 fontSize = MaterialTheme.typography.body1.fontSize,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -139,7 +139,7 @@ fun DetailsScreen(
                 color = Color(0xFF1873B9)
             )
             Text(
-                text = car.carColor,
+                text = person.surname,
                 fontSize = MaterialTheme.typography.body1.fontSize,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF60708F)
@@ -157,7 +157,7 @@ fun DetailsScreen(
                 )
         ) {
             Text(
-                text = "Modelo",
+                text = "Telefono",
                 fontSize = MaterialTheme.typography.body1.fontSize,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -165,7 +165,7 @@ fun DetailsScreen(
                 color = Color(0xFF1873B9)
             )
             Text(
-                text = car.carModel,
+                text = person.phoneNumber,
                 fontSize = MaterialTheme.typography.body1.fontSize,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF60708F)
@@ -176,7 +176,7 @@ fun DetailsScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = { navController.navigate("edit/${car.id}") },
+            onClick = { navController.navigate("personEdit/${person.id}") },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF093980))
 
@@ -188,7 +188,7 @@ fun DetailsScreen(
                 modifier = Modifier.size(16.dp)
 
             )
-            Text("Editar vehiculo", modifier = Modifier.padding(start = 8.dp), color = Color.White)
+            Text("Editar persona", modifier = Modifier.padding(start = 8.dp), color = Color.White)
         }
 
         OutlinedButton(
@@ -203,7 +203,7 @@ fun DetailsScreen(
                 tint = Color(0xFF093980),
                 modifier = Modifier.size(16.dp)
             )
-            Text("Eliminar Vehiculo", modifier = Modifier.padding(start = 8.dp), color = Color(0xFF093980) )
+            Text("Eliminar Persona", modifier = Modifier.padding(start = 8.dp), color = Color(0xFF093980) )
         }
 
     }

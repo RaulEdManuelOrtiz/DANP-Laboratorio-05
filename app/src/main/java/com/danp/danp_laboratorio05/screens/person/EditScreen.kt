@@ -1,4 +1,4 @@
-package com.danp.danp_laboratorio05.screens
+package com.danp.danp_laboratorio05.screens.person
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -18,38 +18,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.danp.danp_laboratorio05.CarViewModel
-import com.danp.danp_laboratorio05.data.Car
+import com.danp.danp_laboratorio05.PersonViewModel
+import com.danp.danp_laboratorio05.data.Person
 
 @Composable
 fun EditScreen(
-    carId: String?,
+    personId: String?,
     navController: NavController,
-    carViewModel: CarViewModel,
+    personViewModel: PersonViewModel,
     onSetAppTitle: (String) -> Unit,
     onShowFab: (Boolean, Boolean) -> Unit,
-    onCarEdited: (Car) -> Unit
+    onPersonEdited: (Person) -> Unit
 ) {
     LaunchedEffect(Unit) {
-        onSetAppTitle("Editar Vehiculo")
+        onSetAppTitle("Editar Persona")
         onShowFab(false, false)
     }
 
-    val receivedCar: Car by carViewModel.getItem(carId!!.toInt())
-        .observeAsState(Car(0, "", "","", ""))
+    val receivedPerson: Person by personViewModel.getItem(personId!!.toInt())
+        .observeAsState(Person(0, "", "","", ""))
 
-    var carPlate by remember { mutableStateOf("") }
-    var carColor by remember { mutableStateOf("") }
-    var carBrand by remember { mutableStateOf("") }
-    var carModel by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var surname by remember { mutableStateOf("") }
+    var identification by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
     val context = LocalContext.current
 
-    if (receivedCar.id != 0) {
+    if (receivedPerson.id != 0) {
         LaunchedEffect(Unit) {
-            carPlate = receivedCar.carPlate
-            carColor = receivedCar.carPlate
-            carBrand = receivedCar.carBrand
-            carModel = receivedCar.carModel
+            name = receivedPerson.name
+            surname = receivedPerson.surname
+            identification = receivedPerson.identification
+            phoneNumber = receivedPerson.phoneNumber
         }
     }
 
@@ -60,36 +60,36 @@ fun EditScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         OutlinedTextField(
-            value = carPlate,
-            onValueChange = { carPlate = it },
-            label = { Text("Placa") },
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Nombre") },
             modifier = Modifier
                 .padding(top = 16.dp)
                 .fillMaxWidth()
         )
 
         OutlinedTextField(
-            value = carColor,
-            onValueChange = { carColor = it },
-            label = { Text("Color") },
+            value = surname,
+            onValueChange = { surname = it },
+            label = { Text("Apellido") },
             modifier = Modifier
                 .padding(top = 16.dp)
                 .fillMaxWidth()
         )
 
         OutlinedTextField(
-            value = carBrand,
-            onValueChange = { carBrand = it },
-            label = { Text("Marca") },
+            value = identification,
+            onValueChange = { identification = it },
+            label = { Text("DNI") },
             modifier = Modifier
                 .padding(top = 16.dp)
                 .fillMaxWidth()
         )
 
         OutlinedTextField(
-            value = carModel,
-            onValueChange = { carModel = it },
-            label = { Text("Modelo") },
+            value = phoneNumber,
+            onValueChange = { phoneNumber = it },
+            label = { Text("Telefono") },
             modifier = Modifier
                 .padding(top = 16.dp)
                 .fillMaxWidth()
@@ -97,17 +97,17 @@ fun EditScreen(
 
         Button(
             onClick = {
-                if (carViewModel.isItemValid(carPlate, carColor, carBrand, carModel)) {
-                    val updatedItem = receivedCar.copy(
-                        carPlate = carPlate.trim(),
-                        carColor = carColor.trim(),
-                        carBrand = carBrand.trim(),
-                        carModel = carModel.trim(),
+                if (personViewModel.isItemValid(name, surname, identification, phoneNumber)) {
+                    val updatedItem = receivedPerson.copy(
+                        name = name.trim(),
+                        surname = surname.trim(),
+                        identification = identification.trim(),
+                        phoneNumber = phoneNumber.trim(),
                     )
-                    onCarEdited(updatedItem)
+                    onPersonEdited(updatedItem)
 
-                    navController.navigate("home") {
-                        popUpTo("home") { inclusive = true }
+                    navController.navigate("personHome") {
+                        popUpTo("personHome") { inclusive = true }
                     }
                 } else {
                     Toast.makeText(context, "Hay un campo vacio!!", Toast.LENGTH_LONG)

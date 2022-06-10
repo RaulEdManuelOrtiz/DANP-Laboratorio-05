@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Car::class], version = 1, exportSchema = false)
+@Database(entities = [Car::class, Person::class], version = 4, exportSchema = false)
 public abstract class CarRoomDatabase : RoomDatabase() {
 
     abstract fun carDao(): CarDao
+    abstract fun personDao(): PersonDao
 
     companion object {
 
@@ -21,7 +22,7 @@ public abstract class CarRoomDatabase : RoomDatabase() {
                     context.applicationContext,
                     CarRoomDatabase::class.java,
                     "item_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 // return instance
                 instance

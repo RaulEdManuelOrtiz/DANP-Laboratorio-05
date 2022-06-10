@@ -1,4 +1,4 @@
-package com.danp.danp_laboratorio05.screens
+package com.danp.danp_laboratorio05.screens.person
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -18,26 +18,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
-import com.danp.danp_laboratorio05.CarViewModel
-import com.danp.danp_laboratorio05.data.Car
+import com.danp.danp_laboratorio05.PersonViewModel
+import com.danp.danp_laboratorio05.data.Person
 
 
 @Composable
 fun AddScreen(
     navController: NavController,
-    carViewModel: CarViewModel,
+    personViewModel: PersonViewModel,
     onSetAppTitle: (String) -> Unit,
     onShowFab: (Boolean, Boolean) -> Unit,
-    onCarAdded: (Car) -> Unit
+    onPersonAdded: (Person) -> Unit
 ) {
-    var carPlate by remember { mutableStateOf("") }
-    var carColor by remember { mutableStateOf("") }
-    var carBrand by remember { mutableStateOf("") }
-    var carModel by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var surname by remember { mutableStateOf("") }
+    var identification by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        onSetAppTitle("Agregar un vehiculo")
+        onSetAppTitle("Agregar una persona")
         onShowFab(false, false)
     }
 
@@ -48,36 +48,36 @@ fun AddScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         OutlinedTextField(
-            value = carPlate,
-            onValueChange = { carPlate = it },
-            label = { Text("Placa") },
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Nombre") },
             modifier = Modifier
                 .padding(top = 16.dp)
                 .fillMaxWidth()
         )
 
         OutlinedTextField(
-            value = carColor,
-            onValueChange = { carColor = it },
-            label = { Text("Color") },
+            value = surname,
+            onValueChange = { surname = it },
+            label = { Text("Apellido") },
             modifier = Modifier
                 .padding(top = 16.dp)
                 .fillMaxWidth()
         )
 
         OutlinedTextField(
-            value = carBrand,
-            onValueChange = { carBrand = it },
-            label = { Text("Marca") },
+            value = identification,
+            onValueChange = { identification = it },
+            label = { Text("DNI") },
             modifier = Modifier
                 .padding(top = 16.dp)
                 .fillMaxWidth()
         )
 
         OutlinedTextField(
-            value = carModel,
-            onValueChange = { carModel = it },
-            label = { Text("Modelo") },
+            value = phoneNumber,
+            onValueChange = { phoneNumber = it },
+            label = { Text("Telefono") },
             modifier = Modifier
                 .padding(top = 16.dp)
                 .fillMaxWidth()
@@ -85,18 +85,18 @@ fun AddScreen(
 
         Button(
             onClick = {
-                if (carViewModel.isItemValid(carPlate, carColor, carBrand, carModel)) {
-                    onCarAdded(
-                        Car(
+                if (personViewModel.isItemValid(name, surname, identification, phoneNumber)) {
+                    onPersonAdded(
+                        Person(
                             0,
-                            carPlate.trim(),
-                            carColor.trim(),
-                            carBrand.trim(),
-                            carModel.trim(),
+                            name.trim(),
+                            surname.trim(),
+                            identification.trim(),
+                            phoneNumber.trim(),
                         )
                     )
-                    navController.navigate("home") {
-                        popUpTo("home") { inclusive = true }
+                    navController.navigate("personHome") {
+                        popUpTo("personHome") { inclusive = true }
                     }
                 } else {
                     Toast.makeText(context, "Hay un campo vacio!!", Toast.LENGTH_LONG)
@@ -107,7 +107,7 @@ fun AddScreen(
                 .fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF093980))
         ) {
-            Text(text = "Agregar vehiculo", color = Color.White)
+            Text(text = "Agregar persona", color = Color.White)
         }
     }
 }
